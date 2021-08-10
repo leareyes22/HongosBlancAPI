@@ -3,12 +3,12 @@ import Usuario from "../models/usuario";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET_KEY } from "../App";
-import { BadRequest, Unauthorized } from "../errors/error";
-import Rol from "../models/rol";
+import { Unauthorized } from "../errors/error";
 import _ from "lodash";
 import sequelize from "../services/DBConnection";
+import UserLoginDTO from "../dtos/user-login-dto";
 
-const MAX_LOGIN_ATTEMPTS = 10;
+//const MAX_LOGIN_ATTEMPTS = 10;
 const ACCESS_TOKEN_EXPIRATION_TIME = "1h"; // 1 HOUR
 
 export const login = async function (
@@ -39,7 +39,7 @@ export const login = async function (
         Error(`Wrong password for user ${req.body.username}`)
       );
     } else {
-      const token = jwt.sign({ username: req.body.username }, JWT_SECRET_KEY, {
+      const token = jwt.sign({ username: req.body.username, password: req.body.password }, JWT_SECRET_KEY, {
         expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
       });
       // TODO: include logic to use refresh tokens
@@ -51,11 +51,12 @@ export const login = async function (
         }
       );
       if (!_.isNull(rol)) {
-        res.json({
+        const userResponse = {
           username: user.getDataValue("username"),
           role: rol[0].nombre,
           token: token,
-        });
+        } as UserLoginDTO;
+        res.json(userResponse);
       }
     }
   } catch (e) {
