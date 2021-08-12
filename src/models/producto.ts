@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import database from "../services/DBConnection";
-import Personal from "./personal";
+import Cosecha from "./cosecha";
 
-const Rol = database.define("rol", {
+const Producto = database.define("producto", {
   id: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -10,16 +10,15 @@ const Rol = database.define("rol", {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   descripcion: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
-Rol.hasMany(Personal, { foreignKey: "id_rol" });
+Producto.hasMany(Cosecha, { foreignKey: "id_producto" });
 
-Rol.sync();
+Producto.sync();
 
-export default Rol;
+export default Producto;

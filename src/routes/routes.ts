@@ -1,6 +1,7 @@
 import express from "express";
 import { body, query } from "express-validator";
 import { login } from "../controllers/authentication.controller";
+import { turnos } from "../controllers/turno.controller";
 
 var router = express.Router();
 
@@ -11,5 +12,8 @@ router.post(
   body("password").isString(),
   login
 );
+
+//Turnos endpoints
+router.get("/control/getTurnos", turnos);
 
 export default router;

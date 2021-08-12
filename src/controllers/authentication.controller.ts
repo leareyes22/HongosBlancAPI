@@ -1,5 +1,5 @@
 import express from "express";
-import Usuario from "../models/usuario";
+import Personal from "../models/personal";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET_KEY } from "../App";
@@ -7,6 +7,7 @@ import { Unauthorized } from "../errors/error";
 import _ from "lodash";
 import sequelize from "../services/DBConnection";
 import UserLoginDTO from "../dtos/user-login-dto";
+import Rol from "../models/rol";
 
 //const MAX_LOGIN_ATTEMPTS = 10;
 const ACCESS_TOKEN_EXPIRATION_TIME = "1h"; // 1 HOUR
@@ -17,7 +18,7 @@ export const login = async function (
   next: express.NextFunction
 ) {
   try {
-    const user = await Usuario.findOne({
+    const user = await Personal.findOne({
       where: { username: req.body.username },
     });
     if (user === null) {
@@ -39,21 +40,21 @@ export const login = async function (
         Error(`Wrong password for user ${req.body.username}`)
       );
     } else {
-      const token = jwt.sign({ username: req.body.username, password: req.body.password }, JWT_SECRET_KEY, {
-        expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
-      });
-      // TODO: include logic to use refresh tokens
-      const id = user.getDataValue("id_rol");
-      const rol: any = await sequelize.query(
-        'SELECT "nombre" from "rol" AS "rol" WHERE "rol"."id" = ' + id,
+      const token = jwt.sign(
+        { username: req.body.username, password: req.body.password },
+        JWT_SECRET_KEY,
         {
-          type: "SELECT",
+          expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
         }
       );
+      // TODO: include logic to use refresh tokens
+      const rol: any = await Rol.findOne({
+        where: { id: user.getDataValue("id_rol") },
+      });
       if (!_.isNull(rol)) {
         const userResponse = {
           username: user.getDataValue("username"),
-          role: rol[0].nombre,
+          role: rol.nombre,
           token: token,
         } as UserLoginDTO;
         res.json(userResponse);

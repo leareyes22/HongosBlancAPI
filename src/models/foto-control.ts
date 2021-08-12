@@ -1,25 +1,22 @@
 import { DataTypes } from "sequelize";
 import database from "../services/DBConnection";
-import Personal from "./personal";
+import ControlSala from "./control-sala";
 
-const Rol = database.define("rol", {
+const FotoControl = database.define("foto_control", {
   id: {
     type: DataTypes.BIGINT,
     primaryKey: true,
   },
-  nombre: {
-    type: DataTypes.STRING,
+  foto: {
+    type: DataTypes.BLOB,
     allowNull: false,
-    unique: true,
   },
   descripcion: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
-Rol.hasMany(Personal, { foreignKey: "id_rol" });
+FotoControl.sync();
 
-Rol.sync();
-
-export default Rol;
+export default FotoControl;

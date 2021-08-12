@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import database from "../services/DBConnection";
-import Rol from "./rol";
+import ControlSala from "./control-sala";
+import Cosecha from "./cosecha";
+import Tarea from "./tarea";
 
 const Personal = database.define("personal", {
   id: {
@@ -19,10 +21,12 @@ const Personal = database.define("personal", {
   id_rol: {
     type: DataTypes.BIGINT,
     allowNull: false,
-  }
+  },
 });
 
-Personal.hasOne(Rol, { foreignKey: "id_rol" });
+Personal.hasMany(ControlSala, { foreignKey: "id_personal" });
+Personal.hasMany(Cosecha, { foreignKey: "id_personal" });
+Personal.hasMany(Tarea, { foreignKey: "id_personal" });
 
 Personal.sync();
 
