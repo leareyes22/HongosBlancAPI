@@ -1,5 +1,5 @@
 export default interface TurnoDTO {
-  id: string;
+  id: number;
   nombre: string;
   descripcion: string;
 }

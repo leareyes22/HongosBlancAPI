@@ -1,7 +1,8 @@
 import express from "express";
 import { body, query } from "express-validator";
 import { login } from "../controllers/authentication.controller";
-import { turnos } from "../controllers/turno.controller";
+import { sala, salas } from "../controllers/salas.controller";
+import { turnos } from "../controllers/turnos.controller";
 
 var router = express.Router();
 
@@ -13,7 +14,9 @@ router.post(
   login
 );
 
-//Turnos endpoints
-router.get("/control/getTurnos", turnos);
+// Control endpoints
+router.get("/control/turno/list", turnos);
+router.get("/control/sala/list", salas);
+router.get("/control/sala/:id", sala);
 
 export default router;
