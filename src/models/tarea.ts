@@ -3,7 +3,8 @@ import database from "../services/DBConnection";
 
 const Tarea = database.define("tarea", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   fecha_generada: {
@@ -23,11 +24,11 @@ const Tarea = database.define("tarea", {
     allowNull: false,
   },
   id_sala: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   id_personal: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });

@@ -4,15 +4,16 @@ import ControlSala from './control-sala';
 
 const Temperatura = database.define("temperatura", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   id_control: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   nro_cama: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   t1: {

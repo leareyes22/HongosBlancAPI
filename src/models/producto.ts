@@ -4,7 +4,8 @@ import Cosecha from "./cosecha";
 
 const Producto = database.define("producto", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   nombre: {

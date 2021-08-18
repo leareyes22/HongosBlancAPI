@@ -4,7 +4,8 @@ import ControlSala from "./control-sala";
 
 const FotoControl = database.define("foto_control", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   foto: {

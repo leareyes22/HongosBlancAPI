@@ -18,7 +18,8 @@ export const salas = function (req: any, res: any) {
   return sequelize
     .query(
       "SELECT sala.id, sala.nombre as nombre, estado_sala.nombre as estado \
-          FROM sala INNER JOIN estado_sala ON sala.id_estado=estado_sala.id",
+          FROM sala INNER JOIN estado_sala ON sala.id_estado=estado_sala.id \
+          ORDER BY sala.id",
       {
         type: "SELECT",
       }

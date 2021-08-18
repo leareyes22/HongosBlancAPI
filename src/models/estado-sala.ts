@@ -4,7 +4,8 @@ import Sala from "./sala";
 
 const EstadoSala = database.define("estado_sala", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   nombre: {
