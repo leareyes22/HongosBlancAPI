@@ -54,6 +54,7 @@ export const login = async function (
       if (!_.isNull(rol)) {
         const userResponse = {
           username: user.getDataValue("username"),
+          user_id: user.getDataValue("id"),
           role: rol.nombre,
           token: token,
         } as UserLoginDTO;

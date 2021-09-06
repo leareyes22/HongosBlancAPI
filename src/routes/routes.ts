@@ -1,10 +1,16 @@
 import express from "express";
 import { body, query } from "express-validator";
 import { login } from "../controllers/authentication.controller";
-import { createControl } from "../controllers/control.controller";
+import {
+  createControl,
+  getControlImage,
+  uploadControlImage,
+} from "../controllers/control.controller";
 import { sala, salas } from "../controllers/salas.controller";
 import { tareas } from "../controllers/tareas.controller";
 import { turno, turnos } from "../controllers/turnos.controller";
+const multer = require("multer");
+const upload = multer();
 
 var router = express.Router();
 
@@ -35,6 +41,8 @@ router.post(
   body("temperaturas").isArray(),
   createControl
 );
+router.post("/control/image", upload.single("image"), uploadControlImage);
+router.get("/control/image/:id", getControlImage);
 
 // Tareas endpoints
 router.get("/tarea/list", tareas);

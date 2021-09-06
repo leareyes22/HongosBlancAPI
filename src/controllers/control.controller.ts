@@ -4,8 +4,10 @@ import express from "express";
 import _ from "lodash";
 import ControlSala from "../models/control-sala";
 import Temperatura from "../models/temperatura";
-import { Internal } from "../errors/error";
+import { BadRequest, Internal } from "../errors/error";
 import TemperaturaCamaDTO from "../dtos/temperatura-cama-dto";
+import FotoControl from "../models/foto-control";
+var stream = require("stream");
 
 export const createControl = async function (
   req: express.Request,
@@ -50,6 +52,68 @@ export const createControl = async function (
       throw new Internal(
         "Error interno del servidor.",
         Error("Por favor contacte a soporte.")
+      );
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const uploadControlImage = async function (
+  req: any,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  console.log(req.query);
+  const errors = validationResult(req);
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const fotoControl: any = await FotoControl.create({
+      foto: req.file.buffer,
+      descripcion: "fotito",
+    });
+    if (!_.isNull(fotoControl)) {
+      res.json({ id: fotoControl.id });
+    } else {
+      throw new BadRequest(
+        "Solicitud inválida.",
+        Error("Por favor ingrese una imagen válida.")
+      );
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const getControlImage = async function (
+  req: any,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  console.log(req.query);
+  const errors = validationResult(req);
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const fotoControl: any = await FotoControl.findOne({
+      where: { id: req.params.id },
+    });
+    if (!_.isNull(fotoControl)) {
+      const buffer = fotoControl.foto.toString("base64");
+      res.send(`data:image/jpeg;base64,${buffer}`);
+    } else {
+      throw new BadRequest(
+        "No se encuentra la imagen requerida.",
+        Error("No se encuentra la imagen requerida.")
       );
     }
   } catch (e) {
