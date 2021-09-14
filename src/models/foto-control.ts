@@ -16,7 +16,12 @@ const FotoControl = database.define("foto_control", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  id_control: {
+    type: DataTypes.INTEGER,
+  },
 });
+
+FotoControl.belongsTo(ControlSala, { foreignKey: "id_control" });
 
 FotoControl.sync();
 

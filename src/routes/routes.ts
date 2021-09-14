@@ -41,7 +41,11 @@ router.post(
   body("temperaturas").isArray(),
   createControl
 );
-router.post("/control/image", upload.single("image"), uploadControlImage);
+router.post(
+  "/control/image/:id_control",
+  upload.single("image"),
+  uploadControlImage
+);
 router.get("/control/image/:id", getControlImage);
 
 // Tareas endpoints

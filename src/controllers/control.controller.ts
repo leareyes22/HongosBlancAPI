@@ -74,8 +74,9 @@ export const uploadControlImage = async function (
 
   try {
     const fotoControl: any = await FotoControl.create({
+      id_control: req.params.id_control,
       foto: req.file.buffer,
-      descripcion: "fotito",
+      descripcion: req.file.originalname.split(".jpg")[0] + "-" + new Date(),
     });
     if (!_.isNull(fotoControl)) {
       res.json({ id: fotoControl.id });
@@ -84,6 +85,33 @@ export const uploadControlImage = async function (
         "Solicitud inválida.",
         Error("Por favor ingrese una imagen válida.")
       );
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const uploadControlImages = async function (
+  req: any,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  console.log(req);
+  const errors = validationResult(req);
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    console.log(req.body.files);
+    for (const file of req.body.files._parts) {
+      const uploadfile = await FotoControl.create({
+        foto: file.buffer,
+        descripcion: "fotito",
+      });
+      res.end();
     }
   } catch (e) {
     next(e);

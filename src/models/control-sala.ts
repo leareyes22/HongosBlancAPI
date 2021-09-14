@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import database from "../services/DBConnection";
-import FotoControl from "./foto-control";
 
 const ControlSala = database.define("control_sala", {
   id: {
@@ -40,13 +39,7 @@ const ControlSala = database.define("control_sala", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_foto: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
 });
-
-ControlSala.belongsTo(FotoControl, { foreignKey: "id_foto" });
 
 ControlSala.sync();
 
