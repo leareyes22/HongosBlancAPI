@@ -1,8 +1,16 @@
 import express from "express";
 import { body, query } from "express-validator";
 import { login } from "../controllers/authentication.controller";
+import {
+  createControl,
+  getControlImage,
+  uploadControlImage,
+} from "../controllers/control.controller";
 import { sala, salas } from "../controllers/salas.controller";
-import { turnos } from "../controllers/turnos.controller";
+import { tareas } from "../controllers/tareas.controller";
+import { turno, turnos } from "../controllers/turnos.controller";
+const multer = require("multer");
+const upload = multer();
 
 var router = express.Router();
 
@@ -14,9 +22,33 @@ router.post(
   login
 );
 
+// Salas endpoints
+router.get("/sala/list", salas);
+router.get("/sala/:id", sala);
+
+// Turnos endpoints
+router.get("/turno/list", turnos);
+router.get("/turno/:id", turno);
+
 // Control endpoints
-router.get("/control/turno/list", turnos);
-router.get("/control/sala/list", salas);
-router.get("/control/sala/:id", sala);
+router.post(
+  "/control",
+  body("fecha_control").isISO8601().toDate(),
+  body("temperatura_aire").isFloat(),
+  body("humedad_relativa").isFloat(),
+  body("co2").isInt(),
+  body("observaciones").isString(),
+  body("temperaturas").isArray(),
+  createControl
+);
+router.post(
+  "/control/image/:id_control",
+  upload.single("image"),
+  uploadControlImage
+);
+router.get("/control/image/:id", getControlImage);
+
+// Tareas endpoints
+router.get("/tarea/list", tareas);
 
 export default router;

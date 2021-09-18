@@ -4,7 +4,8 @@ import Personal from "./personal";
 
 const Rol = database.define("rol", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   nombre: {

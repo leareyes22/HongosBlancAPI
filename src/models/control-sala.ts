@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import database from "../services/DBConnection";
-import FotoControl from "./foto-control";
 
 const ControlSala = database.define("control_sala", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   fecha_control: {
@@ -28,24 +28,18 @@ const ControlSala = database.define("control_sala", {
     allowNull: true,
   },
   id_sala: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   id_personal: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   id_turno: {
-    type: DataTypes.BIGINT,
-    allowNull: false,
-  },
-  id_foto: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
-
-ControlSala.belongsTo(FotoControl, { foreignKey: "id_foto" });
 
 ControlSala.sync();
 

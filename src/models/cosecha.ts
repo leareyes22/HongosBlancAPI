@@ -4,7 +4,8 @@ import Turno from "./turno";
 
 const Cosecha = database.define("cosecha", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   fecha_cosechada: {
@@ -12,7 +13,7 @@ const Cosecha = database.define("cosecha", {
     allowNull: false,
   },
   id_producto: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   kg_cosechados: {
@@ -24,15 +25,15 @@ const Cosecha = database.define("cosecha", {
     allowNull: true,
   },
   id_sala: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   id_personal: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   id_turno: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
