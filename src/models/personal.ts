@@ -6,7 +6,8 @@ import Tarea from "./tarea";
 
 const Personal = database.define("personal", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   username: {
@@ -19,7 +20,7 @@ const Personal = database.define("personal", {
     allowNull: false,
   },
   id_rol: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });

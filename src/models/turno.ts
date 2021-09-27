@@ -5,7 +5,8 @@ import Cosecha from "./cosecha";
 
 const Turno = database.define("turno", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   nombre: {

@@ -6,7 +6,8 @@ import Tarea from "./tarea";
 
 const Sala = database.define("sala", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   nombre: {

@@ -26,6 +26,14 @@ export class BadRequest extends CustomError {
   }
 }
 
+export class NotFound extends CustomError {
+  constructor(message: string, err?: Error) {
+    super(message, err);
+    this.name = "Not found";
+    this.code = 404;
+  }
+}
+
 /**
  * Use this error for expected internal errors.
  * For example when an external service fails
