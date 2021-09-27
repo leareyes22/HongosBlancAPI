@@ -4,10 +4,10 @@ import express from "express";
 import _ from "lodash";
 import ControlSala from "../models/control-sala";
 import Temperatura from "../models/temperatura";
-import { BadRequest, Internal } from "../errors/error";
+import { BadRequest, NotFound } from "../errors/error";
 import TemperaturaCamaDTO from "../dtos/temperatura-cama-dto";
 import FotoControl from "../models/foto-control";
-var stream = require("stream");
+import { ControlDTO } from "../dtos/control-dto";
 
 export const createControl = async function (
   req: express.Request,
@@ -49,9 +49,9 @@ export const createControl = async function (
       });
       res.json({ id_control: control.id });
     } else {
-      throw new Internal(
-        "Error interno del servidor.",
-        Error("Por favor contacte a soporte.")
+      throw new BadRequest(
+        "Solicitud errónea.",
+        Error("Por favor ingrese datos válidos.")
       );
     }
   } catch (e) {
@@ -82,36 +82,9 @@ export const uploadControlImage = async function (
       res.json({ id: fotoControl.id });
     } else {
       throw new BadRequest(
-        "Solicitud inválida.",
+        "Solicitud errónea.",
         Error("Por favor ingrese una imagen válida.")
       );
-    }
-  } catch (e) {
-    next(e);
-  }
-};
-
-export const uploadControlImages = async function (
-  req: any,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  console.log(req);
-  const errors = validationResult(req);
-  console.log(errors);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    console.log(req.body.files);
-    for (const file of req.body.files._parts) {
-      const uploadfile = await FotoControl.create({
-        foto: file.buffer,
-        descripcion: "fotito",
-      });
-      res.end();
     }
   } catch (e) {
     next(e);
@@ -139,12 +112,57 @@ export const getControlImage = async function (
       const buffer = fotoControl.foto.toString("base64");
       res.send(`data:image/jpeg;base64,${buffer}`);
     } else {
-      throw new BadRequest(
-        "No se encuentra la imagen requerida.",
+      throw new NotFound(
+        "Solicitud inválida.",
         Error("No se encuentra la imagen requerida.")
       );
     }
   } catch (e) {
     next(e);
   }
+};
+
+export const controles = function (req: any, res: any) {
+  console.log(req.query);
+
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  return sequelize
+    .query(
+      "SELECT control.id, control.fecha_control, control.temperatura_aire, control.humedad_relativa, \
+          control.co2, control.observaciones, sala.nombre as sala, personal.username as personal, turno.nombre as turno \
+          FROM control_sala as control, sala, personal, turno \
+          WHERE control.id_sala = sala.id AND control.id_turno = turno.id AND control.id_personal = personal.id \
+          ORDER BY control.fecha_control",
+      {
+        type: "SELECT",
+      }
+    )
+    .then((data: any) => {
+      res.status(200).send(
+        JSON.stringify(
+          data.map(
+            (control: any) =>
+              ({
+                id: control.id,
+                fecha_control: control.fecha_control,
+                temperatura_aire: control.temperatura_aire,
+                humedad_relativa: control.humedad_relativa,
+                co2: control.co2,
+                observaciones: control.observaciones,
+                sala: control.sala,
+                personal: control.personal,
+                turno: control.turno,
+              } as ControlDTO)
+          )
+        )
+      );
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
 };

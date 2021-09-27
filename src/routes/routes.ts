@@ -2,10 +2,13 @@ import express from "express";
 import { body, query } from "express-validator";
 import { login } from "../controllers/authentication.controller";
 import {
+  controles,
   createControl,
   getControlImage,
   uploadControlImage,
 } from "../controllers/control.controller";
+import { cosechas, createCosecha } from "../controllers/cosecha.controller";
+import { producto, productos } from "../controllers/producto.controller";
 import { sala, salas } from "../controllers/salas.controller";
 import { tareas } from "../controllers/tareas.controller";
 import { turno, turnos } from "../controllers/turnos.controller";
@@ -47,6 +50,21 @@ router.post(
   uploadControlImage
 );
 router.get("/control/image/:id", getControlImage);
+router.get("/control/list", controles);
+
+// Cosecha endpoints
+router.post(
+  "/cosecha",
+  body("fecha_cosechada").isISO8601().toDate(),
+  body("kg_cosechados").isFloat(),
+  body("observaciones").isString(),
+  createCosecha
+);
+router.get("/cosecha/list", cosechas);
+
+// Productos endpoints
+router.get("/producto/list", productos);
+router.get("/producto/:id", producto);
 
 // Tareas endpoints
 router.get("/tarea/list", tareas);

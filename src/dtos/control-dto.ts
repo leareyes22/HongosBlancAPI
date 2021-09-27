@@ -13,14 +13,13 @@ export default interface CreateControlDTO {
   temperaturas: Array<TemperaturaCamaDTO>;
 }
 
-export const emptyCreateControlDTO: CreateControlDTO = {
-  fecha_control: new Date(),
-  temperatura_aire: 0.0,
-  humedad_relativa: 0.0,
-  co2: 0,
-  observaciones: "",
-  id_sala: -1,
-  id_personal: -1,
-  id_turno: -1,
-  temperaturas: [],
-};
+export interface ControlDTO {
+  fecha_control: Date;
+  temperatura_aire: number;
+  humedad_relativa: number;
+  co2: number;
+  observaciones: string;
+  sala: number;
+  personal: number;
+  turno: number;
+}
