@@ -125,6 +125,60 @@ export const getControlImage = async function (
 export const controles = function (req: any, res: any) {
   console.log(req.query);
 
+  const replacements: any = {};
+
+  const desde_filter: String = req.query.desde
+    ? " AND control.fecha_control >= :desde"
+    : "";
+  if (req.query.desde !== undefined) {
+    replacements["desde"] = req.query.desde;
+  }
+
+  const hasta_filter: String = req.query.hasta
+    ? " AND control.fecha_control <= :hasta"
+    : "";
+  if (req.query.hasta !== undefined) {
+    replacements["hasta"] = req.query.hasta;
+  }
+
+  const personal_filter: String = req.query.personal
+    ? " AND personal.username = :personal"
+    : "";
+  if (req.query.personal !== undefined) {
+    replacements["personal"] = req.query.personal;
+  }
+
+  const turno_filter: String = req.query.turno
+    ? " AND turno.nombre = :turno"
+    : "";
+  if (req.query.turno !== undefined) {
+    replacements["turno"] = req.query.turno;
+  }
+
+  const sala_filter: String = req.query.sala ? " AND sala.nombre = :sala" : "";
+  if (req.query.sala !== undefined) {
+    replacements["sala"] = req.query.sala;
+  }
+
+  const co2_filter: String = req.query.co2 ? " AND control.co2 = :co2" : "";
+  if (req.query.co2 !== undefined) {
+    replacements["co2"] = req.query.co2;
+  }
+
+  const hum_relativa_filter: String = req.query.hum_relativa
+    ? " AND control.humedad_relativa = :hum_relativa"
+    : "";
+  if (req.query.hum_relativa !== undefined) {
+    replacements["hum_relativa"] = req.query.hum_relativa;
+  }
+
+  const temp_aire_filter: String = req.query.temp_aire
+    ? " AND control.temperatura_aire = :temp_aire"
+    : "";
+  if (req.query.temp_aire !== undefined) {
+    replacements["temp_aire"] = req.query.temp_aire;
+  }
+
   const errors = validationResult(req);
   console.log(errors);
   if (!errors.isEmpty()) {
@@ -136,9 +190,18 @@ export const controles = function (req: any, res: any) {
       "SELECT control.id, control.fecha_control, control.temperatura_aire, control.humedad_relativa, \
           control.co2, control.observaciones, sala.nombre as sala, personal.username as personal, turno.nombre as turno \
           FROM control_sala as control, sala, personal, turno \
-          WHERE control.id_sala = sala.id AND control.id_turno = turno.id AND control.id_personal = personal.id \
-          ORDER BY control.fecha_control",
+          WHERE control.id_sala = sala.id AND control.id_turno = turno.id AND control.id_personal = personal.id" +
+        desde_filter +
+        hasta_filter +
+        personal_filter +
+        sala_filter +
+        turno_filter +
+        co2_filter +
+        temp_aire_filter +
+        hum_relativa_filter +
+        " ORDER BY control.fecha_control",
       {
+        replacements: replacements,
         type: "SELECT",
       }
     )

@@ -47,6 +47,48 @@ export const createCosecha = async function (
 export const cosechas = function (req: any, res: any) {
   console.log(req.query);
 
+  const replacements: any = {};
+
+  const desde_filter: String = req.query.desde
+    ? " AND cosecha.fecha_cosechada >= :desde"
+    : "";
+  if (req.query.desde !== undefined) {
+    replacements["desde"] = req.query.desde;
+  }
+
+  const hasta_filter: String = req.query.hasta
+    ? " AND cosecha.fecha_cosechada <= :hasta"
+    : "";
+  if (req.query.hasta !== undefined) {
+    replacements["hasta"] = req.query.hasta;
+  }
+
+  const personal_filter: String = req.query.personal
+    ? " AND personal.username = :personal"
+    : "";
+  if (req.query.personal !== undefined) {
+    replacements["personal"] = req.query.personal;
+  }
+
+  const producto_filter: String = req.query.producto
+    ? " AND producto.nombre = :producto"
+    : "";
+  if (req.query.producto !== undefined) {
+    replacements["producto"] = req.query.producto;
+  }
+
+  const turno_filter: String = req.query.turno
+    ? " AND turno.nombre = :turno"
+    : "";
+  if (req.query.turno !== undefined) {
+    replacements["turno"] = req.query.turno;
+  }
+
+  const sala_filter: String = req.query.sala ? " AND sala.nombre = :sala" : "";
+  if (req.query.sala !== undefined) {
+    replacements["sala"] = req.query.sala;
+  }
+
   const errors = validationResult(req);
   console.log(errors);
   if (!errors.isEmpty()) {
@@ -58,9 +100,16 @@ export const cosechas = function (req: any, res: any) {
       "SELECT cosecha.id, cosecha.fecha_cosechada, producto.nombre as producto, cosecha.kg_cosechados, \
           cosecha.observaciones, sala.nombre as sala, personal.username as personal, turno.nombre as turno\
           FROM cosecha, sala, personal, turno, producto \
-          WHERE cosecha.id_sala = sala.id AND cosecha.id_turno = turno.id AND cosecha.id_personal = personal.id AND cosecha.id_producto = producto.id \
-          ORDER BY cosecha.fecha_cosechada",
+          WHERE cosecha.id_sala = sala.id AND cosecha.id_turno = turno.id AND cosecha.id_personal = personal.id AND cosecha.id_producto = producto.id" +
+        desde_filter +
+        hasta_filter +
+        producto_filter +
+        personal_filter +
+        sala_filter +
+        turno_filter +
+        " ORDER BY cosecha.fecha_cosechada",
       {
+        replacements: replacements,
         type: "SELECT",
       }
     )

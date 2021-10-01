@@ -50,7 +50,18 @@ router.post(
   uploadControlImage
 );
 router.get("/control/image/:id", getControlImage);
-router.get("/control/list", controles);
+router.get(
+  "/control/list",
+  query("desde").optional().isISO8601().toDate(),
+  query("hasta").optional().isISO8601().toDate(),
+  query("personal").optional().isString(),
+  query("turno").optional().isString(),
+  query("sala").optional().isString(),
+  query("co2").optional().isDecimal(),
+  query("temp_aire").optional().isDecimal(),
+  query("hum_relativa").optional().isDecimal(),
+  controles
+);
 
 // Cosecha endpoints
 router.post(
@@ -60,7 +71,16 @@ router.post(
   body("observaciones").isString(),
   createCosecha
 );
-router.get("/cosecha/list", cosechas);
+router.get(
+  "/cosecha/list",
+  query("desde").optional().isISO8601().toDate(),
+  query("hasta").optional().isISO8601().toDate(),
+  query("producto").optional().isString(),
+  query("personal").optional().isString(),
+  query("turno").optional().isString(),
+  query("sala").optional().isString(),
+  cosechas
+);
 
 // Productos endpoints
 router.get("/producto/list", productos);
