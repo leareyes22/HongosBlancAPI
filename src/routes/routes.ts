@@ -12,6 +12,7 @@ import { producto, productos } from "../controllers/producto.controller";
 import { sala, salas } from "../controllers/salas.controller";
 import { tareas } from "../controllers/tareas.controller";
 import { turno, turnos } from "../controllers/turnos.controller";
+import { deleteUser, updateUser, users } from "../controllers/users.controller";
 const multer = require("multer");
 const upload = multer();
 
@@ -88,5 +89,10 @@ router.get("/producto/:id", producto);
 
 // Tareas endpoints
 router.get("/tarea/list", tareas);
+
+// Users endpoints
+router.put("/user/:id", updateUser);
+router.delete("/user/:id", deleteUser);
+router.get("/user/list", users);
 
 export default router;
