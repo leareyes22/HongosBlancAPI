@@ -6,6 +6,50 @@ import sequelize from "../services/DBConnection";
 import Personal from "../models/personal";
 import bcrypt from "bcrypt";
 import UserListDTO from "../dtos/user-list.dto";
+import Rol from "../models/rol";
+
+export const registerUser = async function (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  console.log(req.query);
+  const errors = validationResult(req);
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const user = await Personal.create({
+      username: req.body.username,
+      password: bcrypt.hashSync(req.body.password, 5),
+      id_rol: req.body.id_rol,
+    });
+    if (!_.isNull(user)) {
+      const rol = await Rol.findOne({
+        where: { id: req.body.id_rol },
+      });
+      if (!_.isNull(rol)) {
+        res.send(
+          JSON.stringify({
+            id: user.getDataValue("id"),
+            username: user.getDataValue("username"),
+            rol: rol.getDataValue("nombre"),
+          })
+        );
+      }
+    } else {
+      throw new BadRequest(
+        "Solicitud errónea.",
+        Error("Por favor ingrese datos válidos.")
+      );
+    }
+  } catch (e) {
+    next(e);
+  }
+};
 
 export const updateUser = async function (
   req: express.Request,
@@ -86,7 +130,7 @@ export const deleteUser = async function (
 export const users = function (req: express.Request, res: express.Response) {
   return sequelize
     .query(
-      "SELECT personal.id, personal.username, rol.nombre \
+      "SELECT personal.id as id, personal.username as username, rol.nombre as rol, rol.id as id_rol \
           FROM personal, rol \
           WHERE personal.id_rol = rol.id",
       {
@@ -102,6 +146,7 @@ export const users = function (req: express.Request, res: express.Response) {
                 id: user.id,
                 username: user.username,
                 rol: user.rol,
+                id_rol: user.id_rol,
               } as UserListDTO)
           )
         )
