@@ -3,11 +3,21 @@ import { body, query } from "express-validator";
 import { login } from "../controllers/authentication.controller";
 import {
   controles,
+  controlesData,
+  controlesPorTurno,
   createControl,
   getControlImage,
+  getControlImages,
+  getControlTemperaturas,
   uploadControlImage,
 } from "../controllers/control.controller";
-import { cosechas, createCosecha } from "../controllers/cosecha.controller";
+import {
+  cosechas,
+  cosechasKg,
+  cosechasPorProducto,
+  cosechasPorTurno,
+  createCosecha,
+} from "../controllers/cosecha.controller";
 import { producto, productos } from "../controllers/producto.controller";
 import { rol, roles } from "../controllers/roles.controller";
 import { sala, salas } from "../controllers/salas.controller";
@@ -69,6 +79,8 @@ router.get(
   query("hum_relativa").optional().isDecimal(),
   controles
 );
+router.get("/control/images/:id_control", getControlImages);
+router.get("/control/temperaturas/:id_control", getControlTemperaturas);
 
 // Cosecha endpoints
 router.post(
@@ -111,5 +123,12 @@ router.get("/user/list", users);
 // Roles endpoints
 router.get("/rol/list", roles);
 router.get("/rol/:id", rol);
+
+// Gráficos de reportes endpoints
+router.get("/reportes/controles_turno", controlesPorTurno);
+router.get("/reportes/controles_data", controlesData);
+router.get("/reportes/cosechas_turno", cosechasPorTurno);
+router.get("/reportes/cosechas_producto", cosechasPorProducto);
+router.get("/reportes/cosechas_kg", cosechasKg);
 
 export default router;
