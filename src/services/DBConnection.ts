@@ -19,7 +19,7 @@ const database_name = process.env.POSTGRES_DB
 const user = process.env.POSTGRES_USER ? process.env.POSTGRES_USER : "postgres";
 const password = process.env.POSTGRES_PASSWORD
   ? process.env.POSTGRES_PASSWORD
-  : "postgres";
+  : "hongosblanc123";
 
 const database = new Sequelize(database_name, user, password, {
   host: host,
