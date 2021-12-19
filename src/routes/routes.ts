@@ -21,12 +21,16 @@ import {
 import { producto, productos } from "../controllers/producto.controller";
 import { rol, roles } from "../controllers/roles.controller";
 import { sala, salas } from "../controllers/salas.controller";
-import { tareas } from "../controllers/tareas.controller";
+import { createTarea, tareasDia } from "../controllers/tareas.controller";
 import { turno, turnos } from "../controllers/turnos.controller";
 import {
   deleteUser,
+  empleados,
+  getUserImage,
   registerUser,
   updateUser,
+  uploadUserImage,
+  user,
   users,
 } from "../controllers/users.controller";
 const multer = require("multer");
@@ -106,19 +110,45 @@ router.get("/producto/list", productos);
 router.get("/producto/:id", producto);
 
 // Tareas endpoints
-router.get("/tarea/list", tareas);
+router.get(
+  "/tarea_dia/list",
+  query("fecha").isISO8601().toDate(),
+  query("personal").isInt(),
+  tareasDia
+);
+router.post(
+  "/tarea",
+  body("fecha_generada").isISO8601().toDate(),
+  body("descripcion").isString(),
+  body("fecha_planificada").isISO8601().toDate(),
+  body("id_sala").isInt(),
+  body("id_personal_asignado").isInt(),
+  body("id_personal_creador").isInt(),
+  createTarea
+);
 
 // Users endpoints
 router.post(
   "/user",
   body("username").isString(),
   body("password").isString(),
+  body("email").isEmail(),
+  body("nombre").isString(),
+  body("apellido").isString(),
   body("id_rol").isInt(),
   registerUser
 );
+router.post(
+  "/user/image/:id_personal",
+  upload.single("image"),
+  uploadUserImage
+);
+router.get("/user/image/:id_personal", getUserImage);
+router.get("/user/:id", user);
 router.put("/user/:id", updateUser);
 router.delete("/user/:id", deleteUser);
-router.get("/user/list", users);
+router.get("/empleado/list", empleados);
+router.get("/users/list", users);
 
 // Roles endpoints
 router.get("/rol/list", roles);
