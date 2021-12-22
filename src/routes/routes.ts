@@ -21,7 +21,12 @@ import {
 import { producto, productos } from "../controllers/producto.controller";
 import { rol, roles } from "../controllers/roles.controller";
 import { sala, salas } from "../controllers/salas.controller";
-import { createTarea, tareasDia } from "../controllers/tareas.controller";
+import {
+  createTarea,
+  realizarTarea,
+  tareasDiaEmpleado,
+  tareasSemanaEmpleado,
+} from "../controllers/tareas.controller";
 import { turno, turnos } from "../controllers/turnos.controller";
 import {
   deleteUser,
@@ -111,10 +116,16 @@ router.get("/producto/:id", producto);
 
 // Tareas endpoints
 router.get(
-  "/tarea_dia/list",
+  "/tareas_dia_empleado/list",
   query("fecha").isISO8601().toDate(),
   query("personal").isInt(),
-  tareasDia
+  tareasDiaEmpleado
+);
+router.get(
+  "/tareas_semana_empleado/list",
+  query("fecha").isISO8601().toDate(),
+  query("personal").isInt(),
+  tareasSemanaEmpleado
 );
 router.post(
   "/tarea",
@@ -126,6 +137,7 @@ router.post(
   body("id_personal_creador").isInt(),
   createTarea
 );
+router.put("/realizar_tarea/:id", realizarTarea);
 
 // Users endpoints
 router.post(
