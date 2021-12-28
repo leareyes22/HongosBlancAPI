@@ -27,7 +27,11 @@ const Tarea = database.define("tarea", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_personal: {
+  id_personal_asignado: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  id_personal_creador: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

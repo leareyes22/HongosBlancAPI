@@ -242,7 +242,6 @@ export const cosechasKg = function (req: any, res: any) {
         graphicData.meses.push(element.mes);
         graphicData.totales_kg.push(parseFloat(element.total_kg));
       });
-      console.log(graphicData);
       res.status(200).send(graphicData);
     })
     .catch((error) => {

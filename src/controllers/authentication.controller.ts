@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET_KEY } from "../App";
 import { Unauthorized } from "../errors/error";
 import _ from "lodash";
-import sequelize from "../services/DBConnection";
 import UserLoginDTO from "../dtos/user-login-dto";
 import Rol from "../models/rol";
 

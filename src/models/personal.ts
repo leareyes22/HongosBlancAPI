@@ -19,6 +19,18 @@ const Personal = database.define("personal", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  nombre: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  apellido: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   id_rol: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -27,7 +39,8 @@ const Personal = database.define("personal", {
 
 Personal.hasMany(ControlSala, { foreignKey: "id_personal" });
 Personal.hasMany(Cosecha, { foreignKey: "id_personal" });
-Personal.hasMany(Tarea, { foreignKey: "id_personal" });
+Personal.hasMany(Tarea, { foreignKey: "id_personal_asignado" });
+Personal.hasMany(Tarea, { foreignKey: "id_personal_creador" });
 
 Personal.sync();
 

@@ -3,15 +3,15 @@ import express from "express";
 class CustomError extends Error {
   public publicMessage: string;
   public code: number = -1;
-  constructor(message: string, err?: Error) {
-    super(message + ": " + err?.message);
-    this.message = message + ": " + err?.message;
+  constructor(message: string, err: Error) {
+    super(message + ": " + err.message);
+    this.message = message + ": " + err.message;
     this.publicMessage = message;
   }
 }
 
 export class Unauthorized extends CustomError {
-  constructor(message: string, err?: Error) {
+  constructor(message: string, err: Error) {
     super(message, err);
     this.name = "Unauthorized";
     this.code = 401;
@@ -19,7 +19,7 @@ export class Unauthorized extends CustomError {
 }
 
 export class BadRequest extends CustomError {
-  constructor(message: string, err?: Error) {
+  constructor(message: string, err: Error) {
     super(message, err);
     this.name = "Bad request";
     this.code = 400;
@@ -27,7 +27,7 @@ export class BadRequest extends CustomError {
 }
 
 export class NotFound extends CustomError {
-  constructor(message: string, err?: Error) {
+  constructor(message: string, err: Error) {
     super(message, err);
     this.name = "Not found";
     this.code = 404;
@@ -39,7 +39,7 @@ export class NotFound extends CustomError {
  * For example when an external service fails
  */
 export class Internal extends CustomError {
-  constructor(message: string, err?: Error) {
+  constructor(message: string, err: Error) {
     super(message, err);
     this.name = "Internal server error";
     this.code = 500;
@@ -51,7 +51,7 @@ export class Internal extends CustomError {
  * For example when assumptions made by a function were not followed by the caller
  */
 export class Unexpected extends CustomError {
-  constructor(message: string, err?: Error) {
+  constructor(message: string, err: Error) {
     super(message, err);
     this.name = "Internal server error";
     this.code = 500;
