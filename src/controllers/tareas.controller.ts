@@ -62,7 +62,7 @@ export const tareasDiaEmpleado = function (req: any, res: any) {
                 realizada: tarea.realizada,
                 fecha_planificada: tarea.fecha_planificada,
                 sala: tarea.sala,
-                personal_creador: tarea.personal_creador,
+                personal: tarea.personal_creador,
                 turno: tarea.turno,
               } as TareaDTO)
           )
@@ -126,7 +126,135 @@ export const tareasSemanaEmpleado = function (req: any, res: any) {
                 realizada: tarea.realizada,
                 fecha_planificada: tarea.fecha_planificada,
                 sala: tarea.sala,
-                personal_creador: tarea.personal_creador,
+                personal: tarea.personal_creador,
+                turno: tarea.turno,
+              } as TareaDTO)
+          )
+        )
+      );
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+};
+
+export const tareasDiaJefe = function (req: any, res: any) {
+  console.log(req.query);
+
+  const replacements: any = {};
+
+  const fecha_filter: String = req.query.fecha
+    ? " AND tarea.fecha_planificada >= :fecha::date AND tarea.fecha_planificada < (:fecha::date + '1 day'::interval)"
+    : "";
+  if (req.query.fecha !== undefined) {
+    replacements["fecha"] = moment(req.query.fecha)
+      .startOf("day")
+      .format("YYYY-MM-DD");
+  }
+
+  const personal_filter: String = req.query.personal
+    ? " AND tarea.id_personal_creador = :personal"
+    : "";
+  if (req.query.personal !== undefined) {
+    replacements["personal"] = req.query.personal;
+  }
+
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  return sequelize
+    .query(
+      "SELECT tarea.id, tarea.fecha_generada, tarea.descripcion, tarea.realizada, tarea.fecha_planificada, sala.nombre as sala, CONCAT(pa.nombre, ' ', pa.apellido) as personal_asignado \
+          FROM tarea, sala, personal pa \
+          WHERE tarea.id_sala = sala.id AND tarea.id_personal_asignado = pa.id " +
+        personal_filter +
+        fecha_filter +
+        " ORDER BY tarea.fecha_planificada",
+      {
+        replacements: replacements,
+        type: "SELECT",
+      }
+    )
+    .then((data: any) => {
+      res.status(200).send(
+        JSON.stringify(
+          data.map(
+            (tarea: any) =>
+              ({
+                id: tarea.id,
+                fecha_generada: tarea.fecha_generada,
+                descripcion: tarea.descripcion,
+                realizada: tarea.realizada,
+                fecha_planificada: tarea.fecha_planificada,
+                sala: tarea.sala,
+                personal: tarea.personal_asignado,
+                turno: tarea.turno,
+              } as TareaDTO)
+          )
+        )
+      );
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+};
+
+export const tareasSemanaJefe = function (req: any, res: any) {
+  console.log(req.query);
+
+  const replacements: any = {};
+
+  const fecha_filter: String = req.query.fecha
+    ? " AND tarea.fecha_planificada >= :fecha::date AND tarea.fecha_planificada <= (:fecha::date + '8 days'::interval)"
+    : "";
+  if (req.query.fecha !== undefined) {
+    replacements["fecha"] = moment(req.query.fecha)
+      .startOf("week")
+      .format("YYYY-MM-DD");
+  }
+
+  const personal_filter: String = req.query.personal
+    ? " AND tarea.id_personal_creador = :personal"
+    : "";
+  if (req.query.personal !== undefined) {
+    replacements["personal"] = req.query.personal;
+  }
+
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  return sequelize
+    .query(
+      "SELECT tarea.id, tarea.fecha_generada, tarea.descripcion, tarea.realizada, tarea.fecha_planificada, sala.nombre as sala, CONCAT(pa.nombre, ' ', pa.apellido) as personal_asignado \
+          FROM tarea, sala, personal pa \
+          WHERE tarea.id_sala = sala.id AND tarea.id_personal_asignado = pa.id " +
+        personal_filter +
+        fecha_filter +
+        " ORDER BY tarea.fecha_planificada",
+      {
+        replacements: replacements,
+        type: "SELECT",
+      }
+    )
+    .then((data: any) => {
+      res.status(200).send(
+        JSON.stringify(
+          data.map(
+            (tarea: any) =>
+              ({
+                id: tarea.id,
+                fecha_generada: tarea.fecha_generada,
+                descripcion: tarea.descripcion,
+                realizada: tarea.realizada,
+                fecha_planificada: tarea.fecha_planificada,
+                sala: tarea.sala,
+                personal: tarea.personal_asignado,
                 turno: tarea.turno,
               } as TareaDTO)
           )

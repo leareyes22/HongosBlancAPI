@@ -5,5 +5,5 @@ export default interface TareaDTO {
   realizada: boolean;
   fecha_planificada: Date;
   sala: string;
-  personal_creador: string;
+  personal: string;
 }

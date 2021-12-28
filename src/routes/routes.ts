@@ -25,7 +25,9 @@ import {
   createTarea,
   realizarTarea,
   tareasDiaEmpleado,
+  tareasDiaJefe,
   tareasSemanaEmpleado,
+  tareasSemanaJefe,
 } from "../controllers/tareas.controller";
 import { turno, turnos } from "../controllers/turnos.controller";
 import {
@@ -126,6 +128,18 @@ router.get(
   query("fecha").isISO8601().toDate(),
   query("personal").isInt(),
   tareasSemanaEmpleado
+);
+router.get(
+  "/tareas_dia_jefe/list",
+  query("fecha").isISO8601().toDate(),
+  query("personal").isInt(),
+  tareasDiaJefe
+);
+router.get(
+  "/tareas_semana_jefe/list",
+  query("fecha").isISO8601().toDate(),
+  query("personal").isInt(),
+  tareasSemanaJefe
 );
 router.post(
   "/tarea",
