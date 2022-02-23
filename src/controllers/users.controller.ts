@@ -249,11 +249,13 @@ export const users = async function (
   req: express.Request,
   res: express.Response
 ) {
+  console.log(req.query);
+
   try {
     const data = await sequelize.query(
       "SELECT personal.id as id, personal.username as username, personal.email as email, personal.nombre as nombre, personal.apellido as apellido, rol.nombre as rol, rol.id as id_rol \
           FROM personal, rol \
-          WHERE personal.id_rol = rol.id",
+          WHERE personal.id_rol = rol.id ORDER BY personal.id",
       {
         type: "SELECT",
       }
