@@ -81,9 +81,7 @@ export const cosechas = function (req: any, res: any) {
     replacements["producto"] = req.query.producto;
   }
 
-  const turno_filter: String = req.query.turno
-    ? " AND turno.id = :turno"
-    : "";
+  const turno_filter: String = req.query.turno ? " AND turno.id = :turno" : "";
   if (req.query.turno !== undefined) {
     replacements["turno"] = req.query.turno;
   }
@@ -111,7 +109,7 @@ export const cosechas = function (req: any, res: any) {
         personal_filter +
         sala_filter +
         turno_filter +
-        " ORDER BY cosecha.fecha_cosechada",
+        " ORDER BY cosecha.fecha_cosechada DESC",
       {
         replacements: replacements,
         type: "SELECT",
