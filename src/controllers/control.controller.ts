@@ -229,9 +229,7 @@ export const controles = function (req: any, res: any) {
     replacements["personal"] = req.query.personal;
   }
 
-  const turno_filter: String = req.query.turno
-    ? " AND turno.id = :turno"
-    : "";
+  const turno_filter: String = req.query.turno ? " AND turno.id = :turno" : "";
   if (req.query.turno !== undefined) {
     replacements["turno"] = req.query.turno;
   }
@@ -280,7 +278,7 @@ export const controles = function (req: any, res: any) {
         co2_filter +
         temp_aire_filter +
         hum_relativa_filter +
-        " ORDER BY control.fecha_control",
+        " ORDER BY control.fecha_control DESC",
       {
         replacements: replacements,
         type: "SELECT",

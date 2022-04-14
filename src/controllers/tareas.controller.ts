@@ -44,7 +44,7 @@ export const tareasDiaEmpleado = function (req: any, res: any) {
           WHERE tarea.id_sala = sala.id AND tarea.id_personal_creador = pc.id " +
         personal_filter +
         fecha_filter +
-        " ORDER BY tarea.fecha_planificada",
+        " ORDER BY tarea.fecha_planificada DESC",
       {
         replacements: replacements,
         type: "SELECT",
@@ -108,7 +108,7 @@ export const tareasSemanaEmpleado = function (req: any, res: any) {
           WHERE tarea.id_sala = sala.id AND tarea.id_personal_creador = pc.id " +
         personal_filter +
         fecha_filter +
-        " ORDER BY tarea.fecha_planificada",
+        " ORDER BY tarea.fecha_planificada DESC",
       {
         replacements: replacements,
         type: "SELECT",
@@ -172,7 +172,7 @@ export const tareasDiaJefe = function (req: any, res: any) {
           WHERE tarea.id_sala = sala.id AND tarea.id_personal_asignado = pa.id " +
         personal_filter +
         fecha_filter +
-        " ORDER BY tarea.fecha_planificada",
+        " ORDER BY tarea.fecha_planificada DESC",
       {
         replacements: replacements,
         type: "SELECT",
@@ -236,7 +236,7 @@ export const tareasSemanaJefe = function (req: any, res: any) {
           WHERE tarea.id_sala = sala.id AND tarea.id_personal_asignado = pa.id " +
         personal_filter +
         fecha_filter +
-        " ORDER BY tarea.fecha_planificada",
+        " ORDER BY tarea.fecha_planificada DESC",
       {
         replacements: replacements,
         type: "SELECT",
