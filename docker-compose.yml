@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  db:
+    container_name: 'hongosblanc-db'
+    image: postgres:13.2
+    restart: always
+    volumes:
+      - ./.postgres_data:/var/lib/postgresql/data
+      - ./src/sql/db.sql:/docker-entrypoint-initdb.d/db.sql
+    ports:
+      - "5432:5432" 
+    env_file:
+      - ./db.env
+  
+  api:
+    container_name: 'api'
+    build: ./
+    restart: always
+    ports:
+     - "5001:5001"
+    depends_on:
+     - db
+    env_file:
+     - ./api.env
+

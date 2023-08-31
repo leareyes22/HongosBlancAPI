@@ -4,6 +4,6 @@ export default interface TareaDTO {
   descripcion: string;
   realizada: boolean;
   fecha_planificada: Date;
-  id_sala: number;
-  id_personal: number;
+  sala: string;
+  personal: string;
 }

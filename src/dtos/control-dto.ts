@@ -23,3 +23,15 @@ export interface ControlDTO {
   personal: number;
   turno: number;
 }
+
+export interface GroupCantControlesDTO {
+  turnos: Array<string>;
+  cant_controles: Array<number>;
+}
+
+export interface GroupDataControlesDTO {
+  meses: Array<string>;
+  temps_aire_prom: Array<number>;
+  hums_rel_prom: Array<number>;
+  co2s_prom: Array<number>;
+}

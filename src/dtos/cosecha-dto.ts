@@ -18,3 +18,18 @@ export default interface CosechaDTO {
   personal: string;
   turno: string;
 }
+
+export interface GroupCantCosechasDTO {
+  turnos: Array<string>;
+  cant_cosechas: Array<number>;
+}
+
+export interface GroupCosechasPorProductoDTO {
+  productos: Array<string>;
+  porcentajes: Array<number>;
+}
+
+export interface GroupCosechasKgDTO {
+  meses: Array<string>;
+  totales_kg: Array<number>;
+}
